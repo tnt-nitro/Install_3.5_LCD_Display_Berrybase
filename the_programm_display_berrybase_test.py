@@ -738,14 +738,16 @@ def print_static_info(display):
         update_line_with_border(display, LINE_INFO_START, info_title)
 
         # Labels für dynamische Daten / Labels for dynamic data
-        update_line_with_border(display, LINE_COUNTER, "Laufzeit:")
-        update_line_with_border(display, LINE_DATETIME, "Aktuelle Zeit:")
-        update_line_with_border(display, LINE_OS, "Betriebssystem:")
-        update_line_with_border(display, LINE_MEMORY, "Speicher:")
-        update_line_with_border(display, LINE_TEMP, "Temperatur:")
-        update_line_with_border(display, LINE_CPU, "CPU Last:")
+        update_line_with_border(display, LINE_COUNTER, "Laufzeit / Runtime:")
+        update_line_with_border(display, LINE_DATETIME,
+                                "Aktuelle Zeit / Time:")
+        update_line_with_border(display, LINE_OS, "Betriebssystem / OS:")
+        update_line_with_border(display, LINE_MEMORY, "Speicher / Memory:")
+        update_line_with_border(
+            display, LINE_TEMP, "Temperatur / Temperature:")
+        update_line_with_border(display, LINE_CPU, "CPU Last / CPU Load:")
         update_line_with_border(display, LINE_FPS, "Framerate:")
-        update_line_with_border(display, LINE_SD_CARD, "SD-Karte:")
+        update_line_with_border(display, LINE_SD_CARD, "SD-Karte / SD Card:")
 
         # Freie Zeile nach SD-Karte (Rahmen wird automatisch gezeichnet)
         # Empty line after SD card (border is drawn automatically)
@@ -832,34 +834,34 @@ def main():
                 # Update counter line (flicker-free)
                 elapsed = time.time() - start_time
                 counter_str = format_counter(elapsed)
-                counter_text = f"Laufzeit: {Colors.BOLD}{counter_str}{Colors.RESET}"
+                counter_text = f"Laufzeit / Runtime: {Colors.BOLD}{counter_str}{Colors.RESET}"
                 update_line_with_border(display, LINE_COUNTER, counter_text)
 
                 # Datum/Zeit-Zeile aktualisieren (flackerfrei)
                 # Update date/time line (flicker-free)
                 now = datetime.now()
                 datetime_str = now.strftime("%Y-%m-%d  %H:%M:%S")
-                datetime_text = f"Aktuelle Zeit: {Colors.BOLD}{datetime_str}{Colors.RESET}"
+                datetime_text = f"Aktuelle Zeit / Time: {Colors.BOLD}{datetime_str}{Colors.RESET}"
                 update_line_with_border(display, LINE_DATETIME, datetime_text)
 
                 # Betriebssystem (statisch, aber für Konsistenz)
                 # Operating system (static, but for consistency)
-                os_text = f"Betriebssystem: {Colors.BOLD}{os_info}{Colors.RESET}"
+                os_text = f"Betriebssystem / OS: {Colors.BOLD}{os_info}{Colors.RESET}"
                 update_line_with_border(display, LINE_OS, os_text)
 
                 # Speicher-Informationen / Memory information
                 memory_info = get_memory_info()
-                memory_text = f"Speicher: {Colors.BOLD}{memory_info}{Colors.RESET}"
+                memory_text = f"Speicher / Memory: {Colors.BOLD}{memory_info}{Colors.RESET}"
                 update_line_with_border(display, LINE_MEMORY, memory_text)
 
                 # Temperatur / Temperature
                 temp_info = get_temperature()
-                temp_text = f"Temperatur: {Colors.BOLD}{temp_info}{Colors.RESET}"
+                temp_text = f"Temperatur / Temperature: {Colors.BOLD}{temp_info}{Colors.RESET}"
                 update_line_with_border(display, LINE_TEMP, temp_text)
 
                 # CPU Last / CPU load
                 cpu_load = get_cpu_load()
-                cpu_text = f"CPU Last: {Colors.BOLD}{cpu_load}{Colors.RESET}"
+                cpu_text = f"CPU Last / CPU Load: {Colors.BOLD}{cpu_load}{Colors.RESET}"
                 update_line_with_border(display, LINE_CPU, cpu_text)
 
                 # Framerate berechnen / Calculate framerate
@@ -876,7 +878,7 @@ def main():
 
                 # SD-Karte Speicherplatz / SD card storage space
                 disk_info = get_disk_usage()
-                disk_text = f"SD-Karte: {Colors.BOLD}{disk_info}{Colors.RESET}"
+                disk_text = f"SD-Karte / SD Card: {Colors.BOLD}{disk_info}{Colors.RESET}"
                 update_line_with_border(display, LINE_SD_CARD, disk_text)
 
                 # Uptime
@@ -892,7 +894,7 @@ def main():
 
                 # IP-Adresse / IP address
                 ip_info = get_ip_address()
-                ip_text = f"IP-Adresse: {Colors.BOLD}{ip_info}{Colors.RESET}"
+                ip_text = f"IP-Adresse / IP Address: {Colors.BOLD}{ip_info}{Colors.RESET}"
                 update_line_with_border(display, LINE_IP, ip_text)
 
                 # Pause für flüssige, aber nicht zu schnelle Aktualisierung
