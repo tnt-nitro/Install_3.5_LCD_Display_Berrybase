@@ -20,31 +20,30 @@ from the_programm_display_utils import Display, Colors
 DISPLAY_WIDTH = 60  # Breite des Displays in Zeichen / Display width in characters
 # Rahmenbreite (rechts um 1 Zeichen nach links eingerückt) / Border width (indented 1 character to the left on the right)
 BORDER_WIDTH = DISPLAY_WIDTH - 1
-LINE_EMPTY_BEFORE_TITLE = 2  # Freie Zeile vor Titel / Empty line before title
-LINE_TITLE = 3  # Zeile für Titel / Line for title
-LINE_STATUS = 4  # Zeile für Status / Line for status
-LINE_EMPTY_AFTER_STATUS = 5  # Freie Zeile nach Status / Empty line after status
-LINE_SEPARATOR_1 = 6  # Erste Trennlinie / First separator line
-LINE_INFO_START = 8  # Start der Info-Bereiche / Start of info sections
-LINE_COUNTER = 9  # Zeile für Counter-Anzeige / Line for counter display
-LINE_DATETIME = 10  # Zeile für Datum/Zeit-Anzeige / Line for date/time display
-LINE_OS = 11  # Zeile für Betriebssystem / Line for operating system
-LINE_MEMORY = 12  # Zeile für Speicher / Line for memory
-LINE_TEMP = 13  # Zeile für Temperatur / Line for temperature
-LINE_CPU = 14  # Zeile für CPU Last / Line for CPU load
-LINE_FPS = 15  # Zeile für Framerate / Line for framerate
-LINE_SD_CARD = 16  # Zeile für SD-Karte / Line for SD card
-LINE_EMPTY_1 = 17  # Freie Zeile nach SD-Karte / Empty line after SD card
-LINE_SEPARATOR_2 = 18  # Zweite Trennlinie / Second separator line
-LINE_EMPTY_2 = 19  # Freie Zeile vor Display / Empty line before display
-LINE_DISPLAY_INFO = 20  # Zeile für Display-Informationen / Line for display information
-LINE_UPTIME = 21  # Zeile für Uptime / Line for uptime
-LINE_IP = 22  # Zeile für IP-Adresse / Line for IP address
-LINE_EMPTY_AFTER_IP = 23  # Freie Zeile nach IP-Adresse / Empty line after IP address
-LINE_SEPARATOR_3 = 24  # Dritte Trennlinie / Third separator line
-# Freie Zeile nach dritter Trennlinie / Empty line after third separator
-LINE_EMPTY_AFTER_SEPARATOR_3 = 25
-# Erste Zeile für Farb-Vierecke (R G Y B mit Buchstaben) / First line for color blocks (R G Y B with letters)
+LINE_EMPTY_BEFORE_TITLE = 2  # Freie Zeile vor Titel
+LINE_TITLE = 3  # Zeile für Titel
+LINE_EMPTY_AFTER_STATUS = 4  # Freie Zeile nach Status
+LINE_SEPARATOR_1 = 5  # Erste Trennlinie
+LINE_INFO_START = 7  # Start der Info-Bereiche
+LINE_INSTALL_TIME = 8  # Zeile für Installationszeit
+LINE_COUNTER = 9  # Zeile für Counter-Anzeige
+LINE_DATETIME = 10  # Zeile für Datum/Zeit-Anzeige
+LINE_OS = 11  # Zeile für Betriebssystem
+LINE_MEMORY = 12  # Zeile für Speicher
+LINE_TEMP = 13  # Zeile für Temperatur
+LINE_CPU = 14  # Zeile für CPU Last
+LINE_FPS = 15  # Zeile für Framerate
+LINE_SD_CARD = 16  # Zeile für SD-Karte
+LINE_EMPTY_1 = 17  # Freie Zeile nach SD-Karte
+LINE_SEPARATOR_2 = 18  # Zweite Trennlinie
+LINE_EMPTY_2 = 19  # Freie Zeile vor Display
+LINE_DISPLAY_INFO = 20  # Zeile für Display-Informationen
+LINE_UPTIME = 21  # Zeile für Uptime
+LINE_IP = 22  # Zeile für IP-Adresse
+LINE_EMPTY_AFTER_IP = 23  # Freie Zeile nach IP-Adresse
+LINE_SEPARATOR_3 = 24  # Dritte Trennlinie
+LINE_EMPTY_AFTER_SEPARATOR_3 = 25  # Freie Zeile nach dritter Trennlinie
+# Erste Zeile für Farb-Vierecke (R G Y B mit Buchstaben)
 LINE_COLOR_BLOCKS_1 = 26
 # Erste zusätzliche Zeile für R G Y B (ohne Buchstaben) / First additional line for R G Y B (without letters)
 LINE_COLOR_BLOCKS_1_EXTRA_1 = 27
@@ -87,6 +86,44 @@ def format_counter(seconds):
     minutes = int((seconds % 3600) // 60)
     secs = seconds % 60
     return f"{hours:02d}:{minutes:02d}:{secs:09.6f}"
+
+
+def get_installation_time():
+    """
+    Liest die Startzeit der Installation und berechnet die Installationszeit.
+    Beim ersten Aufruf wird die Installationszeit berechnet und gespeichert,
+    danach wird immer die gespeicherte Zeit zurückgegeben.
+
+    Returns:
+        str: Formatierte Installationszeit oder "N/A" falls nicht verfügbar
+    """
+    try:
+        start_time_file = "/home/pi/.install_start_time"
+        final_time_file = "/home/pi/.install_final_time"
+
+        # Wenn finale Zeit bereits gespeichert ist, diese zurückgeben
+        if os.path.exists(final_time_file):
+            with open(final_time_file, "r") as f:
+                return f.read().strip()
+
+        # Sonst berechnen und speichern
+        if os.path.exists(start_time_file):
+            with open(start_time_file, "r") as f:
+                start_time = float(f.read().strip())
+            installation_time = time.time() - start_time
+            formatted_time = format_counter(installation_time)
+
+            # Finale Zeit speichern
+            try:
+                with open(final_time_file, "w") as f:
+                    f.write(formatted_time)
+            except Exception:
+                pass
+
+            return formatted_time
+    except Exception:
+        pass
+    return "N/A"
 
 
 def format_bytes(bytes_value):
@@ -519,16 +556,11 @@ def print_header(display):
         # Empty line before title (border is drawn automatically)
         update_line_with_border(display, LINE_EMPTY_BEFORE_TITLE, "")
 
-        # Titel zentriert / Title centered
-        title = center_text("LCD Display System")
-        update_line_with_border(display, LINE_TITLE, title)
+        # Titel und Status in einer Zeile zentriert
+        title_status = center_text("LCD Display System Status: Aktiv")
+        update_line_with_border(display, LINE_TITLE, title_status)
 
-        # Status zentriert / Status centered
-        status = center_text("Status: Aktiv")
-        update_line_with_border(display, LINE_STATUS, status)
-
-        # Freie Zeile nach Status (Rahmen wird automatisch gezeichnet)
-        # Empty line after status (border is drawn automatically)
+        # Freie Zeile nach Titel/Status (Rahmen wird automatisch gezeichnet)
         update_line_with_border(display, LINE_EMPTY_AFTER_STATUS, "")
 
         # Trennlinie / Separator line
@@ -737,15 +769,15 @@ def print_static_info(display):
         info_title = "System-Informationen"
         update_line_with_border(display, LINE_INFO_START, info_title)
 
-        # Labels für dynamische Daten / Labels for dynamic data
-        update_line_with_border(display, LINE_COUNTER, "Laufzeit / Runtime:")
-        update_line_with_border(display, LINE_DATETIME,
-                                "Aktuelle Zeit / Time:")
-        update_line_with_border(display, LINE_OS, "Betriebssystem / OS:")
-        update_line_with_border(display, LINE_MEMORY, "Speicher / Memory:")
+        # Labels für dynamische Daten
         update_line_with_border(
-            display, LINE_TEMP, "Temperatur / Temperature:")
-        update_line_with_border(display, LINE_CPU, "CPU Last / CPU Load:")
+            display, LINE_INSTALL_TIME, "Installationszeit:")
+        update_line_with_border(display, LINE_COUNTER, "Laufzeit:")
+        update_line_with_border(display, LINE_DATETIME, "Aktuelle Zeit:")
+        update_line_with_border(display, LINE_OS, "Betriebssystem:")
+        update_line_with_border(display, LINE_MEMORY, "Speicher:")
+        update_line_with_border(display, LINE_TEMP, "Temperatur:")
+        update_line_with_border(display, LINE_CPU, "CPU Last:")
         update_line_with_border(display, LINE_FPS, "Framerate:")
         update_line_with_border(display, LINE_SD_CARD, "SD-Karte / SD Card:")
 
@@ -829,6 +861,12 @@ def main():
         while True:
             try:
                 loop_start = time.time()
+
+                # Installationszeit aktualisieren (flackerfrei)
+                install_time_str = get_installation_time()
+                install_time_text = f"Installationszeit: {Colors.BOLD}{install_time_str}{Colors.RESET}"
+                update_line_with_border(
+                    display, LINE_INSTALL_TIME, install_time_text)
 
                 # Counter-Zeile aktualisieren (flackerfrei)
                 # Update counter line (flicker-free)

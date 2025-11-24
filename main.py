@@ -9,6 +9,7 @@
 import subprocess
 import sys
 import os
+import time
 
 if __name__ == "__main__":
     # ============================================================================
@@ -27,6 +28,14 @@ if __name__ == "__main__":
         print(f"Fehler: {script_path} nicht gefunden!")
         print(f"Error: {script_path} not found!")
         sys.exit(1)
+
+    # Startzeitpunkt speichern
+    start_time_file = "/home/pi/.install_start_time"
+    try:
+        with open(start_time_file, "w") as f:
+            f.write(str(time.time()))
+    except Exception as e:
+        print(f"Warnung: Konnte Startzeit nicht speichern: {e}")
 
     # Installationsskript starten (mit stdin weiterleiten für interaktive Eingabe)
     # Start installation script (with stdin forwarding for interactive input)

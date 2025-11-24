@@ -11,21 +11,200 @@
 import os
 import sys
 import time
+import subprocess
+import re
+import shutil
 
 print("=== LCD Display Installation - Teil 1 ===")
 print("=== LCD Display Installation - Part 1 ===")
 print("")
 
 # ============================================================================
+# HILFSFUNKTION: APT-GET MIT PROGRESSBAR
+# ============================================================================
+
+
+def run_apt_with_progress(command, description):
+    """Führt apt-get aus und zeigt echten Progressbar mit KB-Informationen"""
+    print(f"{description}")
+
+    # Terminal-Breite für Progressbar
+    try:
+        terminal_size = shutil.get_terminal_size()
+        terminal_width = terminal_size.columns
+    except (OSError, AttributeError):
+        terminal_width = 80
+    bar_width = min(50, terminal_width - 30)
+
+    # Prozess starten
+    process = subprocess.Popen(
+        command,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
+        bufsize=1
+    )
+
+    current_package = ""
+    downloaded_kb = 0
+    total_kb = 0
+    last_status = ""
+    line_count = 0
+    last_update_time = time.time()
+
+    # Zeilen in Echtzeit verarbeiten
+    while True:
+        line = process.stdout.readline()
+        if not line:
+            break
+
+        line = line.strip()
+        if not line:
+            continue
+
+        line_count += 1
+        current_time = time.time()
+
+        # Fallback: Zeige zumindest, dass etwas passiert (alle 2 Sekunden)
+        if current_time - last_update_time > 2.0 and not last_status:
+            status = "Arbeite..."
+            print(f"\r   {status}", end="", flush=True)
+            last_status = status
+            last_update_time = current_time
+
+        # Parse "Get: X http://..." Zeilen für Downloads
+        # Format: "Get:1 http://... package.deb 1234 kB"
+        get_match = re.search(
+            r'Get:\s+\d+\s+.*?\s+([\d.]+)\s*(B|kB|MB|GB|b|kb|mb|gb)', line, re.IGNORECASE)
+        if get_match:
+            size = float(get_match.group(1))
+            unit = get_match.group(2).lower()
+
+            # In KB umrechnen
+            if unit == 'b':
+                size_kb = size / 1024
+            elif unit == 'kb':
+                size_kb = size
+            elif unit == 'mb':
+                size_kb = size * 1024
+            elif unit == 'gb':
+                size_kb = size * 1024 * 1024
+            else:
+                size_kb = size
+
+            total_kb += size_kb
+
+            # Versuche Paketnamen zu extrahieren
+            package_match = re.search(r'/([^/\s]+\.(deb|udeb))', line)
+            if package_match:
+                current_package = package_match.group(1)[:40]
+            else:
+                current_package = "Paket"
+
+            status = f"Lade: {current_package} ({size_kb:.1f} KB)"
+            last_update_time = current_time
+
+            # Progressbar anzeigen
+            if len(status) != len(last_status):
+                print("\r" + " " * (terminal_width - 1), end="", flush=True)
+            print(f"\r   {status}", end="", flush=True)
+            last_status = status
+
+        # Parse "Fetched X kB" Zeilen
+        fetched_match = re.search(
+            r'Fetched\s+([\d.]+)\s*(B|kB|MB|GB|b|kb|mb|gb)', line, re.IGNORECASE)
+        if fetched_match:
+            fetched = float(fetched_match.group(1))
+            unit = fetched_match.group(2).lower()
+
+            # In KB umrechnen
+            if unit == 'b':
+                fetched_kb = fetched / 1024
+            elif unit == 'kb':
+                fetched_kb = fetched
+            elif unit == 'mb':
+                fetched_kb = fetched * 1024
+            elif unit == 'gb':
+                fetched_kb = fetched * 1024 * 1024
+            else:
+                fetched_kb = fetched
+
+            downloaded_kb = fetched_kb
+            status = f"Geladen: {downloaded_kb:.1f} KB"
+            last_update_time = current_time
+            print(f"\r   {status}", end="", flush=True)
+            last_status = status
+
+        # Parse "Unpacking ..." Zeilen
+        if "Unpacking" in line:
+            unpack_match = re.search(r'Unpacking\s+(.+)', line)
+            if unpack_match:
+                package = unpack_match.group(1).split()[0]
+                current_package = package[:40]
+                status = f"Entpacke: {current_package}"
+                last_update_time = current_time
+                if len(status) != len(last_status):
+                    print("\r" + " " * (terminal_width - 1), end="", flush=True)
+                print(f"\r   {status}", end="", flush=True)
+                last_status = status
+
+        # Parse "Setting up ..." Zeilen
+        if "Setting up" in line:
+            setup_match = re.search(r'Setting up\s+(.+)', line)
+            if setup_match:
+                package = setup_match.group(1).split()[0]
+                current_package = package[:40]
+                status = f"Installiere: {current_package}"
+                last_update_time = current_time
+                if len(status) != len(last_status):
+                    print("\r" + " " * (terminal_width - 1), end="", flush=True)
+                print(f"\r   {status}", end="", flush=True)
+                last_status = status
+
+        # Parse "Reading package lists..." und ähnliche Statusmeldungen
+        if any(keyword in line for keyword in ["Reading package lists", "Building dependency tree",
+                                               "Selecting previously unselected", "Preparing to unpack",
+                                               "Processing triggers"]):
+            # Kürze Statusmeldung falls nötig
+            status = line[:min(60, terminal_width - 5)]
+            last_update_time = current_time
+            if len(status) != len(last_status):
+                print("\r" + " " * (terminal_width - 1), end="", flush=True)
+            print(f"\r   {status}", end="", flush=True)
+            last_status = status
+
+    # Warte auf Prozess-Ende
+    return_code = process.wait()
+
+    # Letzte Zeile löschen und neue Zeile
+    print("\r" + " " * (terminal_width - 1), end="", flush=True)
+
+    if return_code == 0:
+        # Zeige geladene KB (priorisiere downloaded_kb, sonst total_kb)
+        final_kb = downloaded_kb if downloaded_kb > 0 else total_kb
+        if final_kb > 0:
+            print(f"\r   ✓ Fertig ({final_kb:.1f} KB geladen)")
+        else:
+            print(f"\r   ✓ Fertig")
+    else:
+        print(
+            f"\r   ✗ FEHLER: Installation fehlgeschlagen (Code: {return_code})")
+        return False
+
+    return True
+
+
+# ============================================================================
 # SCHRITT 1: SYSTEM VORBEREITEN
 # STEP 1: PREPARE SYSTEM
 # ============================================================================
 print("1. Installiere benötigte Pakete...")
-print("1. Installing required packages...")
-os.system("apt-get update -y >/dev/null 2>&1")
-os.system("apt-get install -y git dos2unix xserver-xorg-input-evdev >/dev/null 2>&1")
-print("   ✓ Fertig")
-print("   ✓ Done")
+if not run_apt_with_progress("apt-get update -y", "   Aktualisiere Paketlisten..."):
+    sys.exit(1)
+
+if not run_apt_with_progress("apt-get install -y git dos2unix xserver-xorg-input-evdev", "   Installiere Pakete..."):
+    sys.exit(1)
 
 # ============================================================================
 # SCHRITT 2: LCD-SHOW REPOSITORY HOLEN
