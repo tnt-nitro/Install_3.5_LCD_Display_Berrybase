@@ -23,6 +23,12 @@ Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf eine
 - **WICHTIG:** Nur dieses spezifische Image wurde erfolgreich getestet.
 - Waveshare 3.5" LCD (B) Display
 
+## ❗ Kompatibilitätshinweis
+
+**Dieses LCD-Display ist ein Legacy-SPI-Display und funktioniert nicht unter Raspberry Pi OS Bookworm oder Trixie (weder 32-bit noch 64-bit).**
+
+**Nur Raspberry Pi OS Buster (32-bit, Legacy) wird vollständig unterstützt.**
+
 ## Voraussetzungen
 
 1. **Raspberry Pi OS Image (WICHTIG - Nur dieses Image funktioniert!):**

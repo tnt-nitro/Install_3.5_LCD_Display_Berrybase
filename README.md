@@ -4,6 +4,12 @@ Installationsskript für das **Waveshare 3.5" LCD (B) Display** auf Raspberry Pi
 Das Projekt richtet das Display vollständig ein, installiert Treiber, setzt die richtige Rotation,  
 und startet danach automatisch dein eigenes Programm über `the_programm_main.py`.
 
+## ❗ Kompatibilitätshinweis
+
+**Dieses LCD-Display ist ein Legacy-SPI-Display und funktioniert nicht unter Raspberry Pi OS Bookworm oder Trixie (weder 32-bit noch 64-bit).**
+
+**Nur Raspberry Pi OS Buster (32-bit, Legacy) wird vollständig unterstützt.**
+
 ## 📌 Unterstützte Hardware / Software
 
 - **Raspberry Pi 3 B**  

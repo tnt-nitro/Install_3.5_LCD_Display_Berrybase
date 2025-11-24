@@ -1,5 +1,11 @@
 # Projekt-Nutzung: Eigene Anwendungen auf dem LCD Display
 
+## ❗ Kompatibilitätshinweis
+
+**Dieses LCD-Display ist ein Legacy-SPI-Display und funktioniert nicht unter Raspberry Pi OS Bookworm oder Trixie (weder 32-bit noch 64-bit).**
+
+**Nur Raspberry Pi OS Buster (32-bit, Legacy) wird vollständig unterstützt.**
+
 ## Übersicht
 
 Diese Anleitung erklärt, wie Sie das installierte LCD Display für Ihre eigene Anwendung nutzen können. Das Projekt stellt wichtige Utilities bereit, die für eine fehlerfreie Display-Ausgabe **unbedingt verwendet werden müssen**.
