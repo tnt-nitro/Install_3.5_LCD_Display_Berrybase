@@ -24,45 +24,46 @@ LINE_STATUS = 4  # Zeile für Status
 LINE_EMPTY_AFTER_STATUS = 5  # Freie Zeile nach Status
 LINE_SEPARATOR_1 = 6  # Erste Trennlinie
 LINE_INFO_START = 8  # Start der Info-Bereiche
-LINE_COUNTER = 9  # Zeile für Counter-Anzeige
-LINE_DATETIME = 10  # Zeile für Datum/Zeit-Anzeige
-LINE_OS = 11  # Zeile für Betriebssystem
-LINE_MEMORY = 12  # Zeile für Speicher
-LINE_TEMP = 13  # Zeile für Temperatur
-LINE_CPU = 14  # Zeile für CPU Last
-LINE_FPS = 15  # Zeile für Framerate
-LINE_SD_CARD = 16  # Zeile für SD-Karte
-LINE_EMPTY_1 = 17  # Freie Zeile nach SD-Karte
-LINE_SEPARATOR_2 = 18  # Zweite Trennlinie
-LINE_EMPTY_2 = 19  # Freie Zeile vor Display
-LINE_DISPLAY_INFO = 20  # Zeile für Display-Informationen
-LINE_UPTIME = 21  # Zeile für Uptime
-LINE_IP = 22  # Zeile für IP-Adresse
-LINE_EMPTY_AFTER_IP = 23  # Freie Zeile nach IP-Adresse
-LINE_SEPARATOR_3 = 24  # Dritte Trennlinie
-LINE_EMPTY_AFTER_SEPARATOR_3 = 25  # Freie Zeile nach dritter Trennlinie
+LINE_INSTALL_TIME = 9  # Zeile für Installationszeit
+LINE_COUNTER = 10  # Zeile für Counter-Anzeige
+LINE_DATETIME = 11  # Zeile für Datum/Zeit-Anzeige
+LINE_OS = 12  # Zeile für Betriebssystem
+LINE_MEMORY = 13  # Zeile für Speicher
+LINE_TEMP = 14  # Zeile für Temperatur
+LINE_CPU = 15  # Zeile für CPU Last
+LINE_FPS = 16  # Zeile für Framerate
+LINE_SD_CARD = 17  # Zeile für SD-Karte
+LINE_EMPTY_1 = 18  # Freie Zeile nach SD-Karte
+LINE_SEPARATOR_2 = 19  # Zweite Trennlinie
+LINE_EMPTY_2 = 20  # Freie Zeile vor Display
+LINE_DISPLAY_INFO = 21  # Zeile für Display-Informationen
+LINE_UPTIME = 22  # Zeile für Uptime
+LINE_IP = 23  # Zeile für IP-Adresse
+LINE_EMPTY_AFTER_IP = 24  # Freie Zeile nach IP-Adresse
+LINE_SEPARATOR_3 = 25  # Dritte Trennlinie
+LINE_EMPTY_AFTER_SEPARATOR_3 = 26  # Freie Zeile nach dritter Trennlinie
 # Erste Zeile für Farb-Vierecke (R G Y B mit Buchstaben)
-LINE_COLOR_BLOCKS_1 = 26
+LINE_COLOR_BLOCKS_1 = 27
 # Erste zusätzliche Zeile für R G Y B (ohne Buchstaben)
-LINE_COLOR_BLOCKS_1_EXTRA_1 = 27
+LINE_COLOR_BLOCKS_1_EXTRA_1 = 28
 # Zweite zusätzliche Zeile für R G Y B (ohne Buchstaben)
-LINE_COLOR_BLOCKS_1_EXTRA_2 = 28
-LINE_EMPTY_BEFORE_COLOR_BLOCKS_2 = 29  # Freie Zeile vor M C W K
+LINE_COLOR_BLOCKS_1_EXTRA_2 = 29
+LINE_EMPTY_BEFORE_COLOR_BLOCKS_2 = 30  # Freie Zeile vor M C W K
 # Zweite Zeile für Farb-Vierecke (M C W K mit Buchstaben)
-LINE_COLOR_BLOCKS_2 = 30
+LINE_COLOR_BLOCKS_2 = 31
 # Erste zusätzliche Zeile für M C W K (ohne Buchstaben)
-LINE_COLOR_BLOCKS_2_EXTRA_1 = 31
+LINE_COLOR_BLOCKS_2_EXTRA_1 = 32
 # Zweite zusätzliche Zeile für M C W K (ohne Buchstaben)
-LINE_COLOR_BLOCKS_2_EXTRA_2 = 32
-LINE_EMPTY_AFTER_COLOR_BLOCKS_2 = 33  # Freie Zeile nach M C W K
+LINE_COLOR_BLOCKS_2_EXTRA_2 = 33
+LINE_EMPTY_AFTER_COLOR_BLOCKS_2 = 34  # Freie Zeile nach M C W K
 # Dritte Zeile für Farb-Vierecke (Dk G1 G2 G3 Lt mit Buchstaben)
-LINE_COLOR_BLOCKS_3 = 34
+LINE_COLOR_BLOCKS_3 = 35
 # Erste zusätzliche Zeile für Dk G1 G2 G3 Lt (ohne Buchstaben)
-LINE_COLOR_BLOCKS_3_EXTRA_1 = 35
+LINE_COLOR_BLOCKS_3_EXTRA_1 = 36
 # Zweite zusätzliche Zeile für Dk G1 G2 G3 Lt (ohne Buchstaben)
-LINE_COLOR_BLOCKS_3_EXTRA_2 = 36
-LINE_EMPTY_AFTER_COLOR_BLOCKS_3 = 37  # Freie Zeile nach Grauwerten
-LINE_GRAYSCALE = 38  # Zeile für Graustufen 0-100%
+LINE_COLOR_BLOCKS_3_EXTRA_2 = 37
+LINE_EMPTY_AFTER_COLOR_BLOCKS_3 = 38  # Freie Zeile nach Grauwerten
+LINE_GRAYSCALE = 39  # Zeile für Graustufen 0-100%
 UPDATE_INTERVAL = 0.1  # Aktualisierungsintervall in Sekunden
 
 
@@ -80,6 +81,25 @@ def format_counter(seconds):
     minutes = int((seconds % 3600) // 60)
     secs = seconds % 60
     return f"{hours:02d}:{minutes:02d}:{secs:09.6f}"
+
+
+def get_installation_time():
+    """
+    Liest die Startzeit der Installation und berechnet die Installationszeit.
+
+    Returns:
+        str: Formatierte Installationszeit oder "N/A" falls nicht verfügbar
+    """
+    try:
+        start_time_file = "/home/pi/.install_start_time"
+        if os.path.exists(start_time_file):
+            with open(start_time_file, "r") as f:
+                start_time = float(f.read().strip())
+            installation_time = time.time() - start_time
+            return format_counter(installation_time)
+    except Exception:
+        pass
+    return "N/A"
 
 
 def format_bytes(bytes_value):
@@ -490,15 +510,11 @@ def print_header(display):
         # Freie Zeile vor Titel (Rahmen wird automatisch gezeichnet)
         update_line_with_border(display, LINE_EMPTY_BEFORE_TITLE, "")
 
-        # Titel zentriert
-        title = center_text("LCD Display System")
-        update_line_with_border(display, LINE_TITLE, title)
+        # Titel und Status in einer Zeile zentriert
+        title_status = center_text("LCD Display System Status: Aktiv")
+        update_line_with_border(display, LINE_TITLE, title_status)
 
-        # Status zentriert
-        status = center_text("Status: Aktiv")
-        update_line_with_border(display, LINE_STATUS, status)
-
-        # Freie Zeile nach Status (Rahmen wird automatisch gezeichnet)
+        # Freie Zeile nach Titel/Status (Rahmen wird automatisch gezeichnet)
         update_line_with_border(display, LINE_EMPTY_AFTER_STATUS, "")
 
         # Trennlinie
@@ -683,6 +699,7 @@ def print_static_info(display):
         update_line_with_border(display, LINE_INFO_START, info_title)
 
         # Labels für dynamische Daten
+        update_line_with_border(display, LINE_INSTALL_TIME, "Installationszeit:")
         update_line_with_border(display, LINE_COUNTER, "Laufzeit:")
         update_line_with_border(display, LINE_DATETIME, "Aktuelle Zeit:")
         update_line_with_border(display, LINE_OS, "Betriebssystem:")
@@ -761,6 +778,11 @@ def main():
         while True:
             try:
                 loop_start = time.time()
+
+                # Installationszeit aktualisieren (flackerfrei)
+                install_time_str = get_installation_time()
+                install_time_text = f"Installationszeit: {Colors.BOLD}{install_time_str}{Colors.RESET}"
+                update_line_with_border(display, LINE_INSTALL_TIME, install_time_text)
 
                 # Counter-Zeile aktualisieren (flackerfrei)
                 elapsed = time.time() - start_time
