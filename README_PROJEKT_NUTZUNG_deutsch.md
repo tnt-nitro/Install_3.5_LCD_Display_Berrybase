@@ -4,7 +4,7 @@
 
 Diese Anleitung erklärt, wie Sie das installierte LCD Display für Ihre eigene Anwendung nutzen können. Das Projekt stellt wichtige Utilities bereit, die für eine fehlerfreie Display-Ausgabe **unbedingt verwendet werden müssen**.
 
-## ⚠️ WICHTIG: Display-Utilities sind Pflicht!
+## ⚠️ WICHTIG: Display-Utilities sind Pflicht
 
 **Die Datei `the_programm_display_utils.py` MUSS verwendet werden!**
 
@@ -12,6 +12,7 @@ Diese Anleitung erklärt, wie Sie das installierte LCD Display für Ihre eigene 
 - **Mit diesen Utilities:** Flackerfreie, stabile Ausgabe, korrekte Farbdarstellung, präzise Cursor-Positionierung
 
 **Auch wenn Sie:**
+
 - Das Projekt lange nicht genutzt haben
 - Fremd im Projekt sind und es zum ersten Mal sehen
 - Ein bestehendes Programm anpassen möchten
@@ -43,6 +44,7 @@ Die bereitgestellten `the_programm_display_utils.py` lösen alle diese Probleme 
 ### Service-Konfiguration
 
 Der Service `the-programm.service` startet automatisch nach dem Boot:
+
 - **Startet:** `/home/pi/the_programm_main.py`
 - **Ausgabe:** Direkt auf `/dev/tty1` (LCD Display)
 - **Logs:** `/home/pi/logs/the_programm.log`
@@ -102,6 +104,7 @@ script_path = "/pfad/zu/ihrem/programm.py"
 ```
 
 **Beispiel:**
+
 ```python
 script_path = "/home/pi/mein_programm.py"
 ```
@@ -115,6 +118,7 @@ sudo systemctl restart the-programm.service
 ## Methode 2: Projekt duplizieren für andere Programme
 
 **Wann verwenden?**
+
 - Sie möchten das Display in einem anderen Programm nutzen
 - Sie möchten mehrere Projekte parallel betreiben
 - Sie möchten das Original-Projekt unverändert lassen
@@ -263,6 +267,7 @@ display.init()
 #### Wichtige Methoden
 
 ##### `update_line(row, text)`
+
 Aktualisiert eine Zeile flackerfrei:
 
 ```python
@@ -274,11 +279,13 @@ display.update_line(2, f"{Colors.GREEN}Status: OK{Colors.RESET}")
 ```
 
 **Wichtig:**
+
 - `row` beginnt bei 1 (nicht 0)
 - Der Text wird automatisch auf die Zeile gesetzt
 - Alte Inhalte werden automatisch gelöscht
 
 ##### `clear_screen()`
+
 Löscht den gesamten Bildschirm:
 
 ```python
@@ -286,6 +293,7 @@ display.clear_screen()
 ```
 
 ##### `clear_full_screen()`
+
 Löscht den Bildschirm und füllt alle Zeilen mit Leerzeichen:
 
 ```python
@@ -293,6 +301,7 @@ display.clear_full_screen()
 ```
 
 ##### `move_cursor(row, col)`
+
 Bewegt den Cursor zu einer bestimmten Position:
 
 ```python
@@ -300,6 +309,7 @@ display.move_cursor(5, 10)  # Zeile 5, Spalte 10
 ```
 
 ##### `print_border(width, char='#')`
+
 Zeichnet einen Rahmen um das Display:
 
 ```python
@@ -307,6 +317,7 @@ display.print_border(width=60, char='#')
 ```
 
 ##### `update_line_with_border(row, text, width, border_char='#')`
+
 Aktualisiert eine Zeile, während der Rahmen erhalten bleibt:
 
 ```python
@@ -314,6 +325,7 @@ display.update_line_with_border(5, "Mein Text", width=60, border_char='#')
 ```
 
 ##### `cleanup()`
+
 Räumt das Display auf (zeigt Cursor wieder):
 
 ```python
@@ -606,4 +618,3 @@ tail -f /home/pi/logs/the_programm.log
 7. **Service neu starten:** Nach Änderungen `sudo systemctl restart the-programm.service`
 
 Bei Fragen oder Problemen prüfen Sie die Logs und stellen Sie sicher, dass Sie die Display-Utilities korrekt verwenden.
-

@@ -2,7 +2,9 @@
 
 ## Übersicht
 
-Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf einem Raspberry Pi ein und macht es fehlerfrei nutzbar. Die Installation erfolgt in zwei Schritten mit automatischem Reboot dazwischen.
+Dieses Installationsskript richtet ein **3.5" SPI LCD Display** (GoodTFT/XPT2046-basiert) auf einem Raspberry Pi ein und macht es fehlerfrei nutzbar. Die Installation erfolgt in zwei Schritten mit automatischem Reboot dazwischen.
+
+**Wichtig:** Dieses Projekt unterstützt **GoodTFT/XPT2046-basierte 3.5" Displays** (auch bekannt als "3.5 inch RPi Display" oder "3.5 inch RPi LCD"). Diese Displays nutzen **NICHT** das Waveshare-Overlay. Waveshare ≠ GoodTFT.
 
 **Zweck des Projekts:**
 
@@ -20,10 +22,14 @@ Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf eine
 
 - Raspberry Pi 3 B
 - **Raspberry Pi Zero 2 W** (getestet und funktioniert fehlerfrei)
+- **3.5" SPI LCD Display** (GoodTFT/XPT2046-basiert)
+  - Touch-Controller: **XPT2046** (manchmal als XP12046 falsch gedruckt)
+  - Hersteller: GoodTFT / KeDei / MHS
+  - Auch bekannt als: "3.5 inch RPi Display" / "3.5 inch RPi LCD"
+  - **WICHTIG:** Diese Displays nutzen **NICHT** das Waveshare-Overlay
 - **Raspberry Pi OS Buster Lite (32-bit) - Image: 2023-05-03-raspios-buster-armhf-lite.img.xz**
 - **WICHTIG:** Nur dieses spezifische 32-bit Buster Image wird unterstützt.
 - **64-bit Versionen wurden getestet und werden NICHT unterstützt** - keine weiteren Versuche nötig.
-- Waveshare 3.5" LCD (B) Display
 
 ## Voraussetzungen
 
@@ -39,7 +45,9 @@ Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf eine
 2. **Hardware:**
    - Raspberry Pi 3 B
    - **Raspberry Pi Zero 2 W** (getestet und funktioniert fehlerfrei)
-   - Waveshare 3.5" LCD (B) Display
+   - **3.5" SPI LCD Display** (GoodTFT/XPT2046-basiert)
+     - Touch-Controller: XPT2046
+     - Hersteller: GoodTFT / KeDei / MHS
    - SD-Karte mit installiertem OS
 
 3. **Zugriff:**
@@ -112,10 +120,11 @@ Install_3.5_LCD_Display_Berrybase/
 
 ### LCD Display Treiber
 
-- Waveshare LCD-show Repository wird installiert
+- LCD-show Repository wird installiert (kompatibel mit GoodTFT/XPT2046-Displays)
 - LCD35-show Treiber (lite-Version)
 - Rotation: 270° (Hochformat)
-- Touch-Funktionalität wird eingerichtet
+- Touch-Funktionalität wird eingerichtet (XPT2046 Controller)
+- Treiber: fbtft, MHS35, rpi-fbcp
 
 ### Systemd Services
 
@@ -228,8 +237,24 @@ dtoverlay=waveshare35a:rotate=270
 
 ## Referenzen
 
+- [Install 3.5" LCD Display Berrybase - Dieses Projekt](https://github.com/tnt-nitro/Install_3.5_LCD_Display_Berrybase)
+- [LCD-show GitHub Repository](https://github.com/goodtft/LCD-show)
 - [Waveshare Wiki - 3.5" LCD (B)](https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(B)#Screen_orientation_settings)
 - [Waveshare LCD-show GitHub](https://github.com/waveshare/LCD-show)
+
+## Technische Informationen
+
+**Display-Typ:**
+
+- **GoodTFT/XPT2046-basierte 3.5" SPI Displays**
+- Diese Displays nutzen **NICHT** das Waveshare-Overlay
+- Waveshare ≠ GoodTFT
+- Genau deshalb funktionieren sie auf Pi 5 unter 64-bit **NICHT** ohne Anpassungen
+
+**Treiber:**
+
+- fbtft, MHS35, rpi-fbcp
+- Touch: XPT2046
 
 ## Hauptprogramm
 

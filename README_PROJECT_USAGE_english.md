@@ -4,7 +4,7 @@
 
 This guide explains how to use the installed LCD display for your own application. The project provides important utilities that **must be used** for error-free display output.
 
-## ⚠️ IMPORTANT: Display Utilities are Mandatory!
+## ⚠️ IMPORTANT: Display Utilities are Mandatory
 
 **The file `the_programm_display_utils.py` MUST be used!**
 
@@ -12,6 +12,7 @@ This guide explains how to use the installed LCD display for your own applicatio
 - **With these utilities:** Flicker-free, stable output, correct color display, precise cursor positioning
 
 **Even if you:**
+
 - Haven't used the project for a long time
 - Are new to the project and seeing it for the first time
 - Want to adapt an existing program
@@ -43,6 +44,7 @@ The provided `the_programm_display_utils.py` automatically solves all these prob
 ### Service Configuration
 
 The `the-programm.service` starts automatically after boot:
+
 - **Starts:** `/home/pi/the_programm_main.py`
 - **Output:** Directly to `/dev/tty1` (LCD Display)
 - **Logs:** `/home/pi/logs/the_programm.log`
@@ -102,6 +104,7 @@ script_path = "/path/to/your/program.py"
 ```
 
 **Example:**
+
 ```python
 script_path = "/home/pi/my_program.py"
 ```
@@ -115,6 +118,7 @@ sudo systemctl restart the-programm.service
 ## Method 2: Duplicate Project for Other Programs
 
 **When to use?**
+
 - You want to use the display in another program
 - You want to run multiple projects in parallel
 - You want to keep the original project unchanged
@@ -263,6 +267,7 @@ display.init()
 #### Important Methods
 
 ##### `update_line(row, text)`
+
 Updates a line without flickering:
 
 ```python
@@ -274,11 +279,13 @@ display.update_line(2, f"{Colors.GREEN}Status: OK{Colors.RESET}")
 ```
 
 **Important:**
+
 - `row` starts at 1 (not 0)
 - Text is automatically set to the line
 - Old content is automatically cleared
 
 ##### `clear_screen()`
+
 Clears the entire screen:
 
 ```python
@@ -286,6 +293,7 @@ display.clear_screen()
 ```
 
 ##### `clear_full_screen()`
+
 Clears the screen and fills all lines with spaces:
 
 ```python
@@ -293,6 +301,7 @@ display.clear_full_screen()
 ```
 
 ##### `move_cursor(row, col)`
+
 Moves the cursor to a specific position:
 
 ```python
@@ -300,6 +309,7 @@ display.move_cursor(5, 10)  # Row 5, column 10
 ```
 
 ##### `print_border(width, char='#')`
+
 Draws a border around the display:
 
 ```python
@@ -307,6 +317,7 @@ display.print_border(width=60, char='#')
 ```
 
 ##### `update_line_with_border(row, text, width, border_char='#')`
+
 Updates a line while preserving the border:
 
 ```python
@@ -314,6 +325,7 @@ display.update_line_with_border(5, "My Text", width=60, border_char='#')
 ```
 
 ##### `cleanup()`
+
 Cleans up the display (shows cursor again):
 
 ```python
@@ -606,4 +618,3 @@ tail -f /home/pi/logs/the_programm.log
 7. **Restart service:** After changes `sudo systemctl restart the-programm.service`
 
 If you have questions or problems, check the logs and make sure you're using the display utilities correctly.
-
