@@ -19,8 +19,10 @@ Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf eine
 **Kompatibilität:**
 
 - Raspberry Pi 3 B
+- **Raspberry Pi Zero 2 W** (getestet und funktioniert fehlerfrei)
 - **Raspberry Pi OS Buster Lite (32-bit) - Image: 2023-05-03-raspios-buster-armhf-lite.img.xz**
-- **WICHTIG:** Nur dieses spezifische Image wurde erfolgreich getestet.
+- **WICHTIG:** Nur dieses spezifische 32-bit Buster Image wird unterstützt.
+- **64-bit Versionen wurden getestet und werden NICHT unterstützt** - keine weiteren Versuche nötig.
 - Waveshare 3.5" LCD (B) Display
 
 ## Voraussetzungen
@@ -28,12 +30,15 @@ Dieses Installationsskript richtet ein 3.5" LCD Display (Waveshare 35B) auf eine
 1. **Raspberry Pi OS Image (WICHTIG - Nur dieses Image funktioniert!):**
    - **2023-05-03-raspios-buster-armhf-lite.img.xz**
    - Raspberry Pi OS Buster Lite (32-bit)
-   - **Hinweis:** Andere Images (Bookworm, Bullseye, neuere Versionen) wurden ausführlich getestet und funktionieren **nicht** mit dieser Installation
+   - **WICHTIG:** Nur 32-bit Buster wird unterstützt!
+   - **Hinweis:** Andere Images (64-bit, Bookworm, Bullseye, neuere Versionen) wurden ausführlich getestet und funktionieren **nicht** mit dieser Installation
+   - **64-bit Versionen werden NICHT mehr unterstützt** - keine weiteren Versuche nötig.
    - **Download:** Das Image kann von der offiziellen Raspberry Pi Website heruntergeladen werden (Legacy Images / Buster)
    - Image auf SD-Karte geschrieben
 
 2. **Hardware:**
    - Raspberry Pi 3 B
+   - **Raspberry Pi Zero 2 W** (getestet und funktioniert fehlerfrei)
    - Waveshare 3.5" LCD (B) Display
    - SD-Karte mit installiertem OS
 
@@ -73,6 +78,8 @@ Die Installation läuft vollautomatisch ab:
    - Installation ist abgeschlossen
 
 ### Schritt 4: Installation testen
+
+**Installationszeit:** Die Erstinstallation dauert typischerweise **5-15 Minuten**, abhängig von Internetverbindung und SD-Karten-Geschwindigkeit. Die Installationszeit wird nach Abschluss der Installation im Testprogramm angezeigt.
 
 Nach erfolgreicher Installation startet das Programm automatisch nach dem Boot. Sie können es auch manuell starten:
 

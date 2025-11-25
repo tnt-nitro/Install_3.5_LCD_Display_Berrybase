@@ -7,9 +7,11 @@ und startet danach automatisch dein eigenes Programm über `the_programm_main.py
 ## 📌 Unterstützte Hardware / Software
 
 - **Raspberry Pi 3 B**  
+- **Raspberry Pi Zero 2 W** (getestet und funktioniert fehlerfrei)
 - **Waveshare 3.5" LCD (B)**  
 - **Raspberry Pi OS Buster Lite (2023-05-03 – 32-bit)**  
-  → Dieses Projekt funktioniert nur mit diesem Image.
+  → **WICHTIG:** Dieses Projekt funktioniert **NUR** mit diesem 32-bit Buster Image.
+  → 64-bit Versionen wurden getestet und werden **nicht unterstützt** - keine weiteren Versuche nötig.
 
 ## 📘 Dokumentation
 
@@ -47,8 +49,18 @@ Install_3.5_LCD_Display_Berrybase/
 └── README_PROJEKT_NUTZUNG.md
 ```
 
+## ⏱️ Installationszeit
+
+Die Erstinstallation dauert typischerweise **5-15 Minuten**, abhängig von:
+- Internetverbindung (für Git-Clone und Paket-Downloads)
+- SD-Karten-Geschwindigkeit
+- Systemleistung
+
+Die Installationszeit wird nach Abschluss der Installation im Testprogramm angezeigt.
+
 ## ℹ️ Hinweis
 
 Dieses Projekt wurde speziell für das **Waveshare 3.5" LCD (B) Display**  
 und das OS-Image **2023-05-03-raspios-buster-armhf-lite** entwickelt.  
-Andere Images funktionieren erfahrungsgemäß nicht zuverlässig.
+- **Nur 32-bit Buster wird unterstützt** - andere Images (64-bit, Bookworm, Bullseye) funktionieren nicht.
+- 64-bit Versionen wurden ausführlich getestet und werden **nicht mehr unterstützt**.

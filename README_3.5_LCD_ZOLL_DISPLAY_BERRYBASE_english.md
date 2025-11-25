@@ -19,8 +19,10 @@ This installation script sets up a 3.5" LCD display (Waveshare 35B) on a Raspber
 **Compatibility:**
 
 - Raspberry Pi 3 B
+- **Raspberry Pi Zero 2 W** (tested and works flawlessly)
 - **Raspberry Pi OS Buster Lite (32-bit) - Image: 2023-05-03-raspios-buster-armhf-lite.img.xz**
-- **IMPORTANT:** Only this specific image has been successfully tested.
+- **IMPORTANT:** Only this specific 32-bit Buster image is supported.
+- **64-bit versions have been tested and are NOT supported** - no further attempts needed.
 - Waveshare 3.5" LCD (B) Display
 
 ## Prerequisites
@@ -28,12 +30,15 @@ This installation script sets up a 3.5" LCD display (Waveshare 35B) on a Raspber
 1. **Raspberry Pi OS Image (IMPORTANT - Only this image works!):**
    - **2023-05-03-raspios-buster-armhf-lite.img.xz**
    - Raspberry Pi OS Buster Lite (32-bit)
-   - **Note:** Other images (Bookworm, Bullseye, newer versions) have been extensively tested and do **not** work with this installation
+   - **IMPORTANT:** Only 32-bit Buster is supported!
+   - **Note:** Other images (64-bit, Bookworm, Bullseye, newer versions) have been extensively tested and do **not** work with this installation
+   - **64-bit versions are NOT supported anymore** - no further attempts needed.
    - **Download:** The image can be downloaded from the official Raspberry Pi website (Legacy Images / Buster)
    - Image written to SD card
 
 2. **Hardware:**
    - Raspberry Pi 3 B
+   - **Raspberry Pi Zero 2 W** (tested and works flawlessly)
    - Waveshare 3.5" LCD (B) Display
    - SD card with installed OS
 
@@ -73,6 +78,8 @@ The installation runs fully automatically:
    - Installation is complete
 
 ### Step 4: Test Installation
+
+**Installation Time:** The initial installation typically takes **5-15 minutes**, depending on internet connection and SD card speed. The installation time is displayed in the test program after installation is complete.
 
 After successful installation, the program starts automatically after boot. You can also start it manually:
 
