@@ -25,8 +25,8 @@ if __name__ == "__main__":
     # Prüfen ob die Datei existiert
     # Check if the file exists
     if not os.path.exists(script_path):
-        print(f"Fehler: {script_path} nicht gefunden!")
-        print(f"Error: {script_path} not found!")
+        print(
+            f"Fehler: {script_path} nicht gefunden! / Error: {script_path} not found!")
         sys.exit(1)
 
     # Startzeitpunkt speichern
@@ -35,11 +35,10 @@ if __name__ == "__main__":
         with open(start_time_file, "w") as f:
             f.write(str(time.time()))
     except Exception as e:
-        print(f"Warnung: Konnte Startzeit nicht speichern: {e}")
-        print(f"Warning: Could not save start time: {e}")
+        print(
+            f"Warnung: Konnte Startzeit nicht speichern: {e} / Warning: Could not save start time: {e}")
 
     # Installationsskript starten (mit stdin weiterleiten für interaktive Eingabe)
     # Start installation script (with stdin forwarding for interactive input)
-    print("Starte install_lcd_3.5_zoll_display_berrybase_first_file_the_installer.py")
-    print("Starting install_lcd_3.5_zoll_display_berrybase_first_file_the_installer.py")
+    print("Starte install_lcd_3.5_zoll_display_berrybase_first_file_the_installer.py / Starting install_lcd_3.5_zoll_display_berrybase_first_file_the_installer.py")
     subprocess.run([sys.executable, script_path], stdin=sys.stdin)

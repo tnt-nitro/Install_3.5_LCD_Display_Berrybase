@@ -15,8 +15,7 @@ import subprocess
 import re
 import shutil
 
-print("=== LCD Display Installation - Teil 1 ===")
-print("=== LCD Display Installation - Part 1 ===")
+print("=== LCD Display Installation - Teil 1 / Part 1 ===")
 print("")
 
 # ============================================================================
@@ -184,9 +183,10 @@ def run_apt_with_progress(command, description):
         # Zeige geladene KB (priorisiere downloaded_kb, sonst total_kb)
         final_kb = downloaded_kb if downloaded_kb > 0 else total_kb
         if final_kb > 0:
-            print(f"\r   ✓ Fertig ({final_kb:.1f} KB geladen)")
+            print(
+                f"\r   ✓ Fertig ({final_kb:.1f} KB geladen) / Done ({final_kb:.1f} KB loaded)")
         else:
-            print(f"\r   ✓ Fertig")
+            print(f"\r   ✓ Fertig / Done")
     else:
         print(
             f"\r   ✗ FEHLER: Installation fehlgeschlagen (Code: {return_code})")
@@ -199,20 +199,18 @@ def run_apt_with_progress(command, description):
 # SCHRITT 1: SYSTEM VORBEREITEN
 # STEP 1: PREPARE SYSTEM
 # ============================================================================
-print("1. Installiere benötigte Pakete...")
-print("1. Installing required packages...")
-if not run_apt_with_progress("apt-get update -y", "   Aktualisiere Paketlisten..."):
+print("1. Installiere benötigte Pakete... / Installing required packages...")
+if not run_apt_with_progress("apt-get update -y", "   Aktualisiere Paketlisten... / Updating package lists..."):
     sys.exit(1)
 
-if not run_apt_with_progress("apt-get install -y git dos2unix xserver-xorg-input-evdev", "   Installiere Pakete..."):
+if not run_apt_with_progress("apt-get install -y git dos2unix xserver-xorg-input-evdev", "   Installiere Pakete... / Installing packages..."):
     sys.exit(1)
 
 # ============================================================================
 # SCHRITT 2: LCD-SHOW REPOSITORY HOLEN
 # STEP 2: GET LCD-SHOW REPOSITORY
 # ============================================================================
-print("2. Lade LCD-show Repository...")
-print("2. Loading LCD-show repository...")
+print("2. Lade LCD-show Repository... / Loading LCD-show repository...")
 lcd_show_dir = "/home/pi/LCD-show"
 os.system(f"rm -rf {lcd_show_dir} >/dev/null 2>&1")
 
@@ -226,29 +224,24 @@ for attempt in range(3):
         time.sleep(5)
 
 if not os.path.exists(lcd_show_dir):
-    print("   ✗ FEHLER: Repository konnte nicht geladen werden!")
-    print("   ✗ ERROR: Repository could not be loaded!")
+    print("   ✗ FEHLER: Repository konnte nicht geladen werden! / ERROR: Repository could not be loaded!")
     sys.exit(1)
-print("   ✓ Fertig")
-print("   ✓ Done")
+print("   ✓ Fertig / Done")
 
 # ============================================================================
 # SCHRITT 3: WINDOWS-ZEILENENDEN FIXEN
 # STEP 3: FIX WINDOWS LINE ENDINGS
 # ============================================================================
-print("3. Fixe Zeilenenden...")
-print("3. Fixing line endings...")
+print("3. Fixe Zeilenenden... / Fixing line endings...")
 for script in ["LCD35-show", "LCD35B-show", "LCD35B-show-V2", "LCD35C-show"]:
     os.system(f"dos2unix /home/pi/LCD-show/{script} >/dev/null 2>&1")
-print("   ✓ Fertig")
-print("   ✓ Done")
+print("   ✓ Fertig / Done")
 
 # ============================================================================
 # SCHRITT 4: REBOOT AUS LCD35-SHOW ENTFERNEN
 # STEP 4: REMOVE REBOOT FROM LCD35-SHOW
 # ============================================================================
-print("4. Entferne Reboot aus LCD35-show...")
-print("4. Removing reboot from LCD35-show...")
+print("4. Entferne Reboot aus LCD35-show... / Removing reboot from LCD35-show...")
 lcd_script = "/home/pi/LCD-show/LCD35-show"
 if os.path.exists(lcd_script):
     with open(lcd_script, "r", encoding="utf-8") as f:
@@ -259,27 +252,23 @@ if os.path.exists(lcd_script):
     with open(lcd_script, "w", encoding="utf-8") as f:
         f.write(content)
     os.system(f"chmod +x {lcd_script} >/dev/null 2>&1")
-print("   ✓ Fertig")
-print("   ✓ Done")
+print("   ✓ Fertig / Done")
 
 # ============================================================================
 # SCHRITT 5: LCD-TREIBER INSTALLIEREN
 # STEP 5: INSTALL LCD DRIVER
 # ============================================================================
-print("5. Installiere LCD-Treiber...")
-print("5. Installing LCD driver...")
+print("5. Installiere LCD-Treiber... / Installing LCD driver...")
 os.system("cd /home/pi/LCD-show && ./LCD35-show lite >/dev/null 2>&1")
 time.sleep(3)
 os.system("sync")
-print("   ✓ Fertig")
-print("   ✓ Done")
+print("   ✓ Fertig / Done")
 
 # ============================================================================
 # SCHRITT 6: CONFIG.TXT FÜR ROTATION ANPASSEN
 # STEP 6: ADJUST CONFIG.TXT FOR ROTATION
 # ============================================================================
-print("6. Passe config.txt an...")
-print("6. Adjusting config.txt...")
+print("6. Passe config.txt an... / Adjusting config.txt...")
 CONFIG = "/boot/config.txt"
 os.system("mount /boot 2>/dev/null")
 time.sleep(1)
@@ -306,19 +295,16 @@ try:
         f.writelines(new_lines)
     os.system(f"cp {temp_file} {CONFIG} >/dev/null 2>&1")
     os.system("sync")
-    print("   ✓ Fertig")
-    print("   ✓ Done")
+    print("   ✓ Fertig / Done")
 except Exception as e:
-    print(f"   ✗ FEHLER: {e}")
-    print(f"   ✗ ERROR: {e}")
+    print(f"   ✗ FEHLER: {e} / ERROR: {e}")
     sys.exit(1)
 
 # ============================================================================
 # SCHRITT 7: DATEIEN NACH /HOME/PI/ KOPIEREN
 # STEP 7: COPY FILES TO /HOME/PI/
 # ============================================================================
-print("7. Kopiere Programm-Dateien...")
-print("7. Copying program files...")
+print("7. Kopiere Programm-Dateien... / Copying program files...")
 current_dir = os.path.dirname(os.path.abspath(__file__))
 files_to_copy = [
     "install_lcd_3.5_zoll_display_berrybase_second_file_after_install.py",
@@ -334,22 +320,19 @@ for filename in files_to_copy:
     # First check if file already exists in /home/pi/ (e.g. after uninstallation)
     if os.path.exists(target):
         os.system(f"chmod +x {target} >/dev/null 2>&1")
-        print(f"   ✓ {filename} (bereits vorhanden)")
-        print(f"   ✓ {filename} (already present)")
+        print(f"   ✓ {filename} (bereits vorhanden / already present)")
     elif os.path.exists(source):
         os.system(f"cp {source} {target} >/dev/null 2>&1")
         os.system(f"chmod +x {target} >/dev/null 2>&1")
         print(f"   ✓ {filename}")
     else:
-        print(f"   ✗ {filename} nicht gefunden!")
-        print(f"   ✗ {filename} not found!")
+        print(f"   ✗ {filename} nicht gefunden! / not found!")
 
 # ============================================================================
 # SCHRITT 8: SERVICE FÜR ZWEITEN INSTALLER ERSTELLEN
 # STEP 8: CREATE SERVICE FOR SECOND INSTALLER
 # ============================================================================
-print("8. Erstelle Service für Teil 2...")
-print("8. Creating service for part 2...")
+print("8. Erstelle Service für Teil 2... / Creating service for part 2...")
 service_file = "/etc/systemd/system/install_lcd_3.5_zoll_display_berrybase_second_file_after_install.service"
 service_content = """[Unit]
 Description=LCD Display Installation Teil 2
@@ -380,14 +363,11 @@ os.system("systemctl enable install_lcd_3.5_zoll_display_berrybase_second_file_a
 # getty@tty1 bereits jetzt maskieren, damit es beim nächsten Boot nicht startet
 # Mask getty@tty1 now so it doesn't start on next boot
 os.system("systemctl mask getty@tty1.service >/dev/null 2>&1")
-print("   ✓ Fertig")
-print("   ✓ Done")
+print("   ✓ Fertig / Done")
 
 print("")
-print("=== Installation Teil 1 abgeschlossen ===")
-print("=== Installation Part 1 completed ===")
-print("System wird jetzt neu gestartet...")
-print("System will now restart...")
+print("=== Installation Teil 1 abgeschlossen / Part 1 completed ===")
+print("System wird jetzt neu gestartet... / System will now restart...")
 print("")
 time.sleep(2)
 

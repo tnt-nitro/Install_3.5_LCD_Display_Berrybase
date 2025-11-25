@@ -951,15 +951,13 @@ def main():
     except KeyboardInterrupt:
         if display:
             display.cleanup()
-        print(f"\n{Colors.RESET}Programm beendet.")
-        print(f"\n{Colors.RESET}Program terminated.")
+        print(f"\n{Colors.RESET}Programm beendet. / Program terminated.")
     except Exception as e:
         # Fehlerbehandlung für unerwartete Fehler
         # Error handling for unexpected errors
         if display:
             display.cleanup()
-        print(f"\n{Colors.RED}Fehler: {e}{Colors.RESET}")
-        print(f"\n{Colors.RED}Error: {e}{Colors.RESET}")
+        print(f"\n{Colors.RED}Fehler: {e} / Error: {e}{Colors.RESET}")
         sys.exit(1)
 
 
