@@ -200,6 +200,7 @@ def run_apt_with_progress(command, description):
 # STEP 1: PREPARE SYSTEM
 # ============================================================================
 print("1. Installiere benötigte Pakete...")
+print("1. Installing required packages...")
 if not run_apt_with_progress("apt-get update -y", "   Aktualisiere Paketlisten..."):
     sys.exit(1)
 

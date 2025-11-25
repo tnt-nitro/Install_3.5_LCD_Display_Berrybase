@@ -36,6 +36,7 @@ if __name__ == "__main__":
             f.write(str(time.time()))
     except Exception as e:
         print(f"Warnung: Konnte Startzeit nicht speichern: {e}")
+        print(f"Warning: Could not save start time: {e}")
 
     # Installationsskript starten (mit stdin weiterleiten für interaktive Eingabe)
     # Start installation script (with stdin forwarding for interactive input)

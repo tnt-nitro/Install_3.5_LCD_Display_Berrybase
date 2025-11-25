@@ -557,7 +557,7 @@ def print_header(display):
         update_line_with_border(display, LINE_EMPTY_BEFORE_TITLE, "")
 
         # Titel und Status in einer Zeile zentriert
-        title_status = center_text("LCD Display System Status: Aktiv")
+        title_status = center_text("LCD Display System Status: Aktiv / Active")
         update_line_with_border(display, LINE_TITLE, title_status)
 
         # Freie Zeile nach Titel/Status (Rahmen wird automatisch gezeichnet)
@@ -766,18 +766,20 @@ def print_static_info(display):
     """
     try:
         # Info-Bereich Titel / Info section title
-        info_title = "System-Informationen"
+        info_title = "System-Informationen / System Information"
         update_line_with_border(display, LINE_INFO_START, info_title)
 
         # Labels für dynamische Daten
         update_line_with_border(
-            display, LINE_INSTALL_TIME, "Installationszeit:")
-        update_line_with_border(display, LINE_COUNTER, "Laufzeit:")
-        update_line_with_border(display, LINE_DATETIME, "Aktuelle Zeit:")
-        update_line_with_border(display, LINE_OS, "Betriebssystem:")
-        update_line_with_border(display, LINE_MEMORY, "Speicher:")
-        update_line_with_border(display, LINE_TEMP, "Temperatur:")
-        update_line_with_border(display, LINE_CPU, "CPU Last:")
+            display, LINE_INSTALL_TIME, "Installationszeit / Install Time:")
+        update_line_with_border(display, LINE_COUNTER, "Laufzeit / Runtime:")
+        update_line_with_border(display, LINE_DATETIME,
+                                "Aktuelle Zeit / Time:")
+        update_line_with_border(display, LINE_OS, "Betriebssystem / OS:")
+        update_line_with_border(display, LINE_MEMORY, "Speicher / Memory:")
+        update_line_with_border(
+            display, LINE_TEMP, "Temperatur / Temperature:")
+        update_line_with_border(display, LINE_CPU, "CPU Last / CPU Load:")
         update_line_with_border(display, LINE_FPS, "Framerate:")
         update_line_with_border(display, LINE_SD_CARD, "SD-Karte / SD Card:")
 
@@ -795,7 +797,7 @@ def print_static_info(display):
         # Weitere Labels / Additional labels
         update_line_with_border(display, LINE_DISPLAY_INFO, "Display:")
         update_line_with_border(display, LINE_UPTIME, "Uptime:")
-        update_line_with_border(display, LINE_IP, "IP-Adresse:")
+        update_line_with_border(display, LINE_IP, "IP-Adresse / IP Address:")
 
         # Freie Zeile nach IP-Adresse (Rahmen wird automatisch gezeichnet)
         # Empty line after IP address (border is drawn automatically)
@@ -864,7 +866,7 @@ def main():
 
                 # Installationszeit aktualisieren (flackerfrei)
                 install_time_str = get_installation_time()
-                install_time_text = f"Installationszeit: {Colors.BOLD}{install_time_str}{Colors.RESET}"
+                install_time_text = f"Installationszeit / Install Time: {Colors.BOLD}{install_time_str}{Colors.RESET}"
                 update_line_with_border(
                     display, LINE_INSTALL_TIME, install_time_text)
 
